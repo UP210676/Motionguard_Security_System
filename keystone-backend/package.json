@@ -1,0 +1,20 @@
+{
+  "name": "vive-hub-api",
+  "scripts": {
+    "dev": "keystone dev",
+    "start": "keystone start",
+    "build": "keystone build",
+    "postinstall": "keystone postinstall"
+  },
+  "dependencies": {
+    "@azure/storage-blob": "^12.26.0",
+    "@keystone-6/auth": "^8.0.0",
+    "@keystone-6/core": "^6.3.1",
+    "@prisma/client": "^5.22.0",
+    "typescript": "^5.6.2"
+  },
+  "devDependencies": {
+    "prisma": "^5.22.0",
+    "typescript": "^5.5.0"
+  }
+}

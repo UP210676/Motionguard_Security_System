@@ -1,0 +1,74 @@
+trigger:
+- azure-pipelines-DevOps
+
+pool:
+  name: 'Default'
+
+variables:
+  tag: '$(Build.BuildId)' # Identificador único para la imagen backend
+
+# BACK BUILD AND PUSH
+
+stages:
+- stage: Build
+  displayName: Build and Push Docker Images
+  jobs:
+  - job: Build_api
+    displayName: Build Backend
+    steps:
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'seguridad-registro-connection'
+        command: 'build'
+        Dockerfile: 'keystone-backend/Dockerfile'
+        arguments: '-t seguridadregistro.azurecr.io/backend-repository:$(tag) -t seguridadregistro.azurecr.io/backend-repository:latest'
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'seguridad-registro-connection'
+        repository: 'backend-repository'
+        command: 'push'
+        tags: '$(tag),latest'
+
+    
+
+# FRONT BUILD AND PUSH
+
+  - job: Build_front
+    displayName: Build Frontend
+    steps:
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'seguridad-registro-connection'
+        command: 'build'
+        Dockerfile: 'SistemaDeSeguridad/Dockerfile'
+        arguments: '-t seguridadregistro.azurecr.io/deteccion-repo:$(tag) -t seguridadregistro.azurecr.io/deteccion-repo:latest'
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'seguridad-registro-connection'
+        repository: 'deteccion-repo'
+        command: 'push'
+        
+# WEB AZURE DEPLOY /FRONT & BACK
+- stage: Deploy
+  displayName: Deploy to Azure Web
+  dependsOn: Build
+  jobs:
+  - job: Deploy_api
+    displayName: Deploy Backend
+    steps:
+    - task: AzureWebAppContainer@1
+      inputs:
+        azureSubscription: 'Azure for Students(1)(8ed6b03c-84c4-49e3-99b2-4162fe6371d7)'
+        appName: 'deteccionmovimiento'
+        containers: 'seguridadregistro.azurecr.io/backend-repository:$(tag)'
+        appSettings: '-Port 3000'
+  
+  - job: Deploy_front
+    displayName: Deploy Frontend
+    steps:
+    - task: AzureWebAppContainer@1
+      inputs:
+        azureSubscription: 'Azure for Students(1)(8ed6b03c-84c4-49e3-99b2-4162fe6371d7)'
+        appName: 'deteccion'
+        containers: 'seguridadregistro.azurecr.io/deteccion-repo:$(tag)'
+        appSettings: '-Port 8081'
