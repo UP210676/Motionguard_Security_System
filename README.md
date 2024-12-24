@@ -42,7 +42,7 @@ This folder contains the backend for the project. It is developed with KeystoneJ
 
 ### Prerequisites
 - **Node.js**: To run frontend and backend scripts.
-- **Yarn**: To manage project dependencies.
+- **Npm**: To manage project dependencies.
 
 ---
 
@@ -50,12 +50,11 @@ This folder contains the backend for the project. It is developed with KeystoneJ
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/ISC-UPA/2024-3-ISC09-Sistema-de-Seguridad-con-Deteccion-de-Movimiento.git
-   cd 2024-3-ISC09-Sistema-de-Seguridad-con-Deteccion-de-Movimiento
+   git clone https://github.com/UP210676/Motionguard_Security_System.git
 
 2. Install the dependencies for the entire project:
    ```bash
-   yarn install
+   npm install
 
 ### Running the applications
 
@@ -63,12 +62,16 @@ This folder contains the backend for the project. It is developed with KeystoneJ
       Navigate to the keystone-backend directopry
       ```bash
       cd keystone-backend
-      npx keystone dev
+      npm run build
+      npm install
+      npm start
+      
       
    2. Frontend(SistemaDeSeguridad)
       Navigate to the SistemaDeSeguridad directory:
       
       ```bash
       cd SistemaDeSeguridad
-      yarn start 
+      npm install
+      npm start
    
